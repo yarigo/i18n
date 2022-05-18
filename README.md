@@ -1,6 +1,6 @@
-# i18n ![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+# i18n
 
-i18n is a Go package that helps you translate Go programs into multiple languages.
+i18n is a package that helps you translate Go programs into multiple languages.
 
 ## Features
 
@@ -8,31 +8,69 @@ i18n is a Go package that helps you translate Go programs into multiple language
 
 ## Installation
 
-```shell
-go get -u github.com/yarigo/i18n
+```sh
+go install git.local/go/i18n@latest
 ```
 
-## Rules
+## How to use
 
-For set a current localization, use a language mather function of all supported languages and match from it by language string:
+First you must create a json language file (see [`Translation file structure`](#file-structure) for details).
+
+Load all translation files and set a fallback language. If you don't need a fallback language, you can set it as `language.Und`.
+
+**i18n/en/main.json**
+
+```json
+[{ "id": "hello", "message": "Hello, world!" }]
+```
+
+**i18n/ru/main.json**
+
+```json
+[{ "id": "hello", "message": "Здравствуй, Мир!" }]
+```
+
+**main.go**
 
 ```go
-matcher := language.NewMatcher([]language.Tag{
-	language.English, // The first language is used as fallback.
-	language.MustParse("en-AU"),
-	language.Danish,
-	language.Chinese,
-	language.Russian,
-})
+package main
 
-lang, _ := language.MatchStrings(matcher, "ru")
+import (
+	"fmt"
+	"log"
+
+	"github.com/yarigo/i18n"
+	"golang.org/x/text/language"
+)
+
+func main() {
+	// Create a new instance.
+	t := i18n.New(&i18n.Config{Path: "./i18n", Fallback: language.Und})
+
+	// Load all translation files.
+	if err := t.Load(); err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	// Take printer for English language.
+	en := t.Printer(language.English)
+	// Take printer for Russian language.
+	ru := t.Printer(language.Russian)
+
+	// Print message.
+	fmt.Println(en.Sprintf("hello"))
+	// Print message.
+	fmt.Println(ru.Sprintf("hello"))
+}
 ```
 
-Package support multiple definition by its number identification. As identification use a position into array rules. See tests for understanding this.
+```sh
+$ go run main.go
+Hello, world!
+Здравствуй, Мир!
+```
 
 ### plural
-
-If you want to use plural function, you can set it as "plural:one" or "one" (without plural prefix).
 
 A selector matches an argument if:
 
@@ -44,34 +82,80 @@ A selector matches an argument if:
 - it is of the form "<x" where x is an integer that is larger than the
   argument.
 
-For use a format, set it as suffix. For example:
+For example:
 
 ```json
-"one:%d": "..."
+"rules": {
+  "1": {
+    "=0": "...",
+    "one": "..."
+  },
+  "2": {
+    ">10": "...",
+    "other": "..."
+  },
+}
+```
+
+`1` and `2` its a index of variable.
+
+## [Translation file structure](#file-structure)
+
+One of the `message` or `rules` fields is required, but not both.
+
+### Without plural
+
+```json
+[
+  {
+    "id": "unique message id",
+    "message": "message text"
+  }
+]
+```
+
+### With plural
+
+```json
+[
+  {
+    "id": "unique message id",
+    "rules": {
+      "1": {
+        "one": "first message id",
+        "many": "message id %d"
+      }
+    }
+  }
+]
 ```
 
 or
 
 ```json
-"plural:one:%d": "..."
+[
+  {
+    "id": "unique message id",
+    "rules": {
+      "2": {
+        "one": "message id %d and its %d text message",
+        "many": "message id %d and message text %d"
+      }
+    }
+  }
+]
 ```
 
-Examples of format strings are:
-
-- %.2f decimal with scale 2
-- %.2e scientific notation with precision 3 (scale + 1)
-- %d integer
-
-## Locale structure
+`1` and `2` are the number of the argument to use in the plural. If you only use the first argument, you can skip defining it like this:
 
 ```json
-{
-	"messages": [
-		{
-			"id": "id of message",
-			"text": "message",
-			"rules": ["rules"]
-		}
-	]
-}
+[
+  {
+    "id": "unique message id",
+    "rules": {
+      "one": "first message id",
+      "many": "message id %d"
+    }
+  }
+]
 ```

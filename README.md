@@ -14,7 +14,7 @@ go install git.local/go/i18n@latest
 
 ## How to use
 
-First you must create a json language file (see [`Translation file structure`](#file-structure) for details).
+First you must create a json language file (see [`Translation file structure`](#translation-file-structure) for details).
 
 Load all translation files and set a fallback language. If you don't need a fallback language, you can set it as `language.Und`.
 
@@ -99,7 +99,7 @@ For example:
 
 `1` and `2` its a index of variable.
 
-## [Translation file structure](#file-structure)
+## Translation file structure
 
 One of the `message` or `rules` fields is required, but not both.
 

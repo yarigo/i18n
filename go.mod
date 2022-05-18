@@ -1,4 +1,4 @@
-module i18n
+module github.com/yarigo/i18n/v2
 
 go 1.18
 

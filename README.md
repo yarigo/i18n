@@ -36,31 +36,31 @@ Load all translation files and set a fallback language. If you don't need a fall
 package main
 
 import (
-	"fmt"
-	"log"
+  "fmt"
+  "log"
 
-	"github.com/yarigo/i18n"
-	"golang.org/x/text/language"
+  "github.com/yarigo/i18n"
+  "golang.org/x/text/language"
 )
 
 func main() {
-	// Create a new instance.
-	t := i18n.New(&i18n.Config{Path: "./i18n", Fallback: language.Und})
+  // Create a new instance.
+  t := i18n.New(&i18n.Config{Path: "./i18n", Fallback: language.Und})
 
-	// Load all translation files.
-	if err := t.Load(); err != nil {
-		log.Fatalln(err.Error())
-	}
+  // Load all translation files.
+  if err := t.Load(); err != nil {
+    log.Fatalln(err.Error())
+  }
 
-	// Take printer for English language.
-	en := t.Printer(language.English)
-	// Take printer for Russian language.
-	ru := t.Printer(language.Russian)
+  // Take printer for English language.
+  en := t.Printer(language.English)
+  // Take printer for Russian language.
+  ru := t.Printer(language.Russian)
 
-	// Print message.
-	fmt.Println(en.Sprintf("hello"))
-	// Print message.
-	fmt.Println(ru.Sprintf("hello"))
+  // Print message.
+  fmt.Println(en.Sprintf("hello"))
+  // Print message.
+  fmt.Println(ru.Sprintf("hello"))
 }
 ```
 

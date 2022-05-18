@@ -1,23 +1,24 @@
-all: build
+all: check test
 
-install:
-	@true
-
+.PHONY: deend
 depend:
 	@go mod download
 
-build: check
-	@true
-
+.PHONY: check
 check:
-	@go fmt *.go
+	@gofmt -w ./
 	@go vet ./...
 	@golint
-	@go test -v -cover ./...
+	@staticcheck ./...
 
+.PHONY: test
+test:
+	@go test -failfast -v -race -cover ./...
+
+.PHONY: serve
 serve:
 	@reflex -r '.*\.go' -s \
 	-- sh -c \
 	'make check'
 
-.PHONY: all install depend build check serve
+.DEFAULT_GOAL := all

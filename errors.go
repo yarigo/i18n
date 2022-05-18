@@ -6,7 +6,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-// Language tag already exists.
+// ErrorLanguageTagAlreadyExists reports a duplicate language tag.
 type ErrorLanguageTagAlreadyExists struct {
 	Tag language.Tag
 }
@@ -16,7 +16,8 @@ func (i *ErrorLanguageTagAlreadyExists) Error() string {
 	return fmt.Sprintf("language tag `%v` already exists", i.Tag)
 }
 
-// Fallback language tag doesn't exists.
+// ErrorFallbackTagNotExists reports that translation files for fallback
+// language do not exist.
 type ErrorFallbackTagNotExists struct {
 	Tag language.Tag
 }
@@ -26,7 +27,7 @@ func (i *ErrorFallbackTagNotExists) Error() string {
 	return fmt.Sprintf("fallback language tag `%v` doesn't exists", i.Tag)
 }
 
-// Message structure validation error.
+// ErrorMessageValidate reports a validation error.
 type ErrorMessageValidate struct {
 	Tag       language.Tag
 	FilePath  string

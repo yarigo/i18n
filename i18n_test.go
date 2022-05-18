@@ -361,8 +361,8 @@ func Test_TranslationValidateMessage(t *testing.T) {
           "1": {
             "=0": "яблок нет",
             "one": "есть один ящик с яблоками",
-			      "few": "есть %d ящика с яблоками",
-			      "many": "есть %d ящиков с яблоками"
+            "few": "есть %d ящика с яблоками",
+            "many": "есть %d ящиков с яблоками"
           }
         }
       }`,
@@ -405,22 +405,22 @@ func Test_TranslationLoadMessage(t *testing.T) {
 		{
 			name: "successfully",
 			message: `{
-		    "id": "apple",
-		    "message": "яблоки"
-		  }`,
+        "id": "apple",
+        "message": "яблоки"
+      }`,
 			out: "яблоки",
 		},
 		{
 			name: "successfully with rules",
 			message: `{
-		    "id": "apple",
-		    "rules": {
-		      "=0":    "яблок нет",
-		      "one":   "есть одно яблоко",
-		      "few":   "есть %d яблока",
-		      "many":  "есть %d яблок"
-		    }
-		  }`,
+        "id": "apple",
+        "rules": {
+          "=0":    "яблок нет",
+          "one":   "есть одно яблоко",
+          "few":   "есть %d яблока",
+          "many":  "есть %d яблок"
+        }
+      }`,
 			argv: []interface{}{1},
 			out:  "есть одно яблоко",
 		},
@@ -432,8 +432,8 @@ func Test_TranslationLoadMessage(t *testing.T) {
           "2": {
             "=0": "яблок нет",
             "one": "есть %d яблок в %d ящике",
-			      "few": "есть %d яблок в %d ящиках",
-			      "many": "есть %d яблок в %d ящиках"
+            "few": "есть %d яблок в %d ящиках",
+            "many": "есть %d яблок в %d ящиках"
           }
         }
       }`,

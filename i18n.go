@@ -36,7 +36,7 @@ type lang struct {
 	entry fs.DirEntry
 }
 
-// A new instance of i18n.
+// New instance of i18n.
 func New(cfg *Config) *I18n {
 	return &I18n{
 		languages: make([]lang, 0),
@@ -63,7 +63,7 @@ func (i *I18n) Load() (err error) {
 	return i.load()
 }
 
-// A Printer implements language-specific formatted I/O analogous to the fmt
+// Printer implements language-specific formatted I/O analogous to the fmt
 // package.
 func (i *I18n) Printer(tag language.Tag) *message.Printer {
 	if printer, ok := i.printer[tag]; ok {

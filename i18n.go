@@ -144,13 +144,24 @@ func loadLanguage(
 		}
 
 		for _, entry := range files {
-			return loadLanguage(tag, entry, currentPath)
+			if entry.IsDir() {
+				loadLanguage(tag, entry, currentPath)
+				continue
+			}
+
+			err = (&translation{
+				tag:      tag,
+				filePath: filepath.Join(currentPath, entry.Name()),
+			}).loadLanguageFile()
+			if err != nil {
+				return err
+			}
 		}
+
+		return nil
 	}
 
-	t := &translation{tag: tag, filePath: currentPath}
-
-	return t.loadLanguageFile()
+	return (&translation{tag: tag, filePath: currentPath}).loadLanguageFile()
 }
 
 // Append language file.
